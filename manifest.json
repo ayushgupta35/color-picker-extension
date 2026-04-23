@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "Quick Color Picker",
+  "version": "1.0.0",
+  "description": "Pick any color from the current page and copy hex/RGB values.",
+  "permissions": ["activeTab", "tabs", "storage", "scripting"],
+  "action": {
+    "default_title": "Quick Color Picker",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "commands": {
+    "start-picker": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+P",
+        "mac": "Command+Shift+P"
+      },
+      "description": "Start picking color from the current tab"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  }
+}

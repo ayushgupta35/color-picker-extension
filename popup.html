@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quick Color Picker</title>
+  <style>
+    :root {
+      --bg: #f4f6fb;
+      --surface: #ffffff;
+      --border: #d7dff0;
+      --text: #1e2a45;
+      --muted: #67708d;
+      --accent: #3a6ee8;
+      --accent-2: #6c4dd7;
+      --accent-3: #10a3b3;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      width: 332px;
+      font: 500 14px/1.4 "Avenir Next", "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(116, 156, 255, 0.2), transparent 42%),
+        radial-gradient(circle at 100% 0%, rgba(117, 98, 215, 0.18), transparent 45%),
+        linear-gradient(160deg, #fbfcff 0%, #f4f7ff 52%, #f6fbff 100%);
+    }
+
+    .app {
+      padding: 10px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .card {
+      background: color-mix(in srgb, var(--surface) 90%, white 10%);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      padding: 8px;
+      box-shadow: 0 4px 10px rgba(58, 84, 160, 0.08);
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    .title {
+      font-weight: 800;
+      letter-spacing: 0.015em;
+      font-size: 14px;
+      color: #223157;
+    }
+
+    .status {
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 3px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #fff;
+      font: 700 12px/1 "Avenir Next", "Segoe UI", sans-serif;
+      padding: 8px 10px;
+      cursor: pointer;
+      box-shadow: 0 5px 11px rgba(58, 84, 160, 0.2);
+    }
+
+    .btn:hover {
+      background: linear-gradient(135deg, var(--accent-2), var(--accent-3));
+    }
+
+    .btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+      box-shadow: none;
+      filter: grayscale(0.35);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .action-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 3px;
+    }
+
+    .action-hint {
+      font-size: 10px;
+      color: var(--muted);
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .wheel {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      object-fit: contain;
+      box-shadow: 0 4px 10px rgba(30, 50, 110, 0.18);
+    }
+
+    .brand {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #4f57a8;
+    }
+
+    .swatch-line {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .swatch {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      border: 1px solid rgba(30, 56, 120, 0.25);
+      background: #000;
+      flex: 0 0 auto;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.9), 0 4px 9px rgba(33, 78, 145, 0.16);
+    }
+
+    .compact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .line {
+      display: grid;
+      gap: 3px;
+    }
+
+    .label {
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .value {
+      font: 600 12px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace;
+      padding: 7px 8px;
+      border-radius: 7px;
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, #ffffff, #f8fbff);
+      min-height: 30px;
+      display: flex;
+      align-items: center;
+      overflow-wrap: anywhere;
+    }
+
+    select, input {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 7px 8px;
+      font: 600 12px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace;
+      background: linear-gradient(180deg, #ffffff, #f8fbff);
+      color: var(--text);
+    }
+
+    .triple-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .convert-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .hint {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <section class="card">
+      <div class="hero">
+        <img class="wheel" src="icon48.png" alt="Quick Color Picker logo" />
+        <div>
+          <div class="brand">Color Wheel</div>
+          <div class="title">Quick Picker</div>
+          <div class="status" id="status">Ready.</div>
+          <div class="hint" id="shortcutHint">Shortcut: Loading...</div>
+        </div>
+        <div class="action-wrap">
+          <button class="btn" id="startPick">Start</button>
+          <div class="action-hint">Esc to cancel</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="row" style="margin-bottom: 2px;">
+        <div class="title">Live Color</div>
+        <div class="swatch-line">
+          <div class="swatch" id="swatch"></div>
+        </div>
+      </div>
+      <div class="compact-grid">
+        <div class="line">
+          <div class="label">HEX</div>
+          <div class="value" id="hexValue">#000000</div>
+        </div>
+        <div class="line">
+          <div class="label">RGBA</div>
+          <div class="value" id="rgbaValue">rgba(0, 0, 0, 1)</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="title">Display + Copy</div>
+      <div class="triple-grid">
+        <div class="line">
+          <div class="label">Cursor</div>
+          <select id="cursorFormat">
+            <option value="hex">HEX</option>
+            <option value="rgba">RGBA</option>
+          </select>
+        </div>
+        <div class="line">
+          <div class="label">Copy</div>
+          <select id="clickFormat">
+            <option value="hex">HEX</option>
+            <option value="rgba">RGBA</option>
+          </select>
+        </div>
+        <div class="line">
+          <div class="label">Panel</div>
+          <select id="showLivePanel">
+            <option value="true">Show</option>
+            <option value="false">Hide</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="title">Converter</div>
+      <div class="convert-grid">
+        <div class="line">
+          <div class="label">HEX to RGBA</div>
+          <input id="hexInput" placeholder="#AABBCC or #ABC" />
+          <div class="value" id="hexToRgbaOut">-</div>
+        </div>
+        <div class="line">
+          <div class="label">RGBA to HEX</div>
+          <input id="rgbaInput" placeholder="rgba(12, 34, 56, 1)" />
+          <div class="value" id="rgbaToHexOut">-</div>
+        </div>
+      </div>
+      <div class="hint">Live converter.</div>
+    </section>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
